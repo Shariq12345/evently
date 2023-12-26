@@ -106,7 +106,7 @@ const EventDetails = async ({
         <Collection
           data={relatedEvents?.data}
           emptyTitle="No Events Found"
-          emptyStateSubText="Come back later"
+          emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={3}
           page={searchParams.page as string}

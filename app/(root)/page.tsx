@@ -1,14 +1,21 @@
+import CategoryFilter from "@/components/shared/CategoryFilter";
 import Collection from "@/components/shared/Collection";
+import Search from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import { getAllEvents } from "@/lib/actions/event.actions";
+import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function Home() {
+export default async function Home({ searchParams }: SearchParamProps) {
+  const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams?.query as string) || "";
+  const category = (searchParams?.category as string) || "";
+
   const events = await getAllEvents({
-    query: "",
-    category: "",
-    page: 1,
+    query: searchText,
+    category,
+    page,
     limit: 6,
   });
 
@@ -18,7 +25,7 @@ export default async function Home() {
         <div className="wrapper grid grid-cols-1 gap-5 md:grid-cols-2 2xl:gap-0">
           <div className="flex flex-col justify-center gap-8">
             <h1 className="h1-bold">
-              Unite, Celebrate, Connect: Your Events, Our Unified Platform!
+              Host, Connect, Celebrate: Your Events, Our Platform!
             </h1>
             <p className="p-regular-20 md:p-regular-24">
               Book and learn helpful tips from 3,168+ mentors in world-class
@@ -44,21 +51,22 @@ export default async function Home() {
         className="wrapper my-8 flex flex-col gap-8 md:gap-12"
       >
         <h2 className="h2-bold">
-          Trusted by <br /> Thousands of Events
+          Trust by <br /> Thousands of Events
         </h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
-          Search CategoryFilter
+          <Search />
+          <CategoryFilter />
         </div>
 
         <Collection
           data={events?.data}
           emptyTitle="No Events Found"
-          emptyStateSubText="Come Back Later :))"
+          emptyStateSubText="Come back later"
           collectionType="All_Events"
           limit={6}
-          page={1}
-          totalPages={2}
+          page={page}
+          totalPages={events?.totalPages}
         />
       </section>
     </>
